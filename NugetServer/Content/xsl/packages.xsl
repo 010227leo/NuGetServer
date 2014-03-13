@@ -19,13 +19,13 @@
             <xsl:value-of select="a:title"/>
           </xsl:element>
         </div>
-        <!--<div class="package-delete">
+        <div class="package-delete">
           <xsl:element name="a">
             <xsl:attribute name="href">
-              /Package/Delete/<xsl:value-of select="a:id" />
+              /Package/Delete?id=<xsl:value-of select="a:content/@src" />
             </xsl:attribute>Delete
           </xsl:element>
-        </div>-->
+        </div>
         <ul>
           <li>
             <label>Author</label>

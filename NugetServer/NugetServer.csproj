@@ -140,12 +140,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\xsl\packages.xsl" />
     <Content Include="DataServices\Packages.svc" />
-    <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <None Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Packages\Readme.txt" />
-    <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="UploadPackage.asmx" />
     <Content Include="Web.config" />

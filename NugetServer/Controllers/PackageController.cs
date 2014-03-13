@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Xml;
-using NugetServer.Models;
 
 namespace NugetServer.Controllers
 {
+	using NugetServer.Models;
+
 	public class PackageController : Controller
 	{
 		public ActionResult Index()
@@ -20,33 +18,53 @@ namespace NugetServer.Controllers
 		public ActionResult PackageList()
 		{
 			var doc = new XmlDocument();
-			string path = GetUrl("/nuget/Packages").ToString();
+			var path = GetUrl("/nuget/Packages").ToString();
+
 			doc.Load(path);
-			var result = new XmlActionResult();
-			result.Document = doc;
-			result.TransformSource = Server.MapPath("~/Content/xsl/packages.xsl");
-			return result;
+
+			return new XmlActionResult
+			{
+				Document = doc,
+				TransformSource = Server.MapPath("~/Content/xsl/packages.xsl")
+			};
 		}
 
 		public ActionResult Delete(string id)
 		{
-			string path = Path.Combine(Server.MapPath("~/Packages"), id);
-			if (System.IO.File.Exists(path))
-			{
-				System.IO.File.Delete(path);
-				ViewBag.StatusMessage = new StatusMessage
-				{
-					Success = true,
-					Message = String.Format("{0} was deleted successfully.", id)
-				};
-			}
-			else
+			if (string.IsNullOrWhiteSpace(id))
 			{
 				ViewBag.StatusMessage = new StatusMessage
 				{
 					Success = false,
-					Message = String.Format("{0} does not exist.", id)
+					Message = "id is null or empty"
 				};
+			}
+			else
+			{
+				var filename = id.Split(new string[] { "/api/v2/package/" }, StringSplitOptions.None)[1];
+
+				filename = string.Format("{0}.nupkg", filename.Replace("/", "."));
+
+				var path = Path.Combine(Server.MapPath("~/Packages"), filename);
+
+				if (System.IO.File.Exists(path))
+				{
+					System.IO.File.Delete(path);
+
+					ViewBag.StatusMessage = new StatusMessage
+					{
+						Success = true,
+						Message = String.Format("{0} was deleted successfully.", filename)
+					};
+				}
+				else
+				{
+					ViewBag.StatusMessage = new StatusMessage
+					{
+						Success = false,
+						Message = String.Format("{0} does not exist.", filename)
+					};
+				}
 			}
 
 			return View("Index");
