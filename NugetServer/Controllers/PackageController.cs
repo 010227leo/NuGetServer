@@ -31,12 +31,12 @@ namespace NugetServer.Controllers
 
 		public ActionResult Delete(string id)
 		{
-			if (string.IsNullOrWhiteSpace(id))
+			if (string.IsNullOrWhiteSpace(id) || !id.Contains("/api/v2/package/"))
 			{
 				ViewBag.StatusMessage = new StatusMessage
 				{
 					Success = false,
-					Message = "id is null or empty"
+					Message = "id is illegal."
 				};
 			}
 			else
