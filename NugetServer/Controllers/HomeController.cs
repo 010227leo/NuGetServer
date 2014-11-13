@@ -6,18 +6,18 @@ using System.Web.Mvc;
 namespace NugetServer.Controllers
 {
 	using NugetServer.Models;
+	using System.Web.Security;
 
 	public class HomeController : Controller
 	{
-		//
-		// GET: /Home/
-
+		[AdminAuth]
 		public ActionResult Index()
 		{
 			return View();
 		}
 
 		[HttpPost]
+		[AdminAuth]
 		public ActionResult Upload(HttpPostedFileBase upload)
 		{
 			if (upload == null)
@@ -45,6 +45,35 @@ namespace NugetServer.Controllers
 			}
 
 			return View("Index");
+		}
+
+		public ActionResult Login()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public ActionResult Login(string username = null, string password = null)
+		{
+			if ("admin".Equals(username) && "dfancy".Equals(password))
+			{
+				var ticket = new FormsAuthenticationTicket(
+					1,
+					username,
+					DateTime.Now,
+					DateTime.Now.AddDays(7),
+					true,
+					string.Empty,
+					FormsAuthentication.FormsCookiePath);
+
+				var encTicket = FormsAuthentication.Encrypt(ticket);
+
+				Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+
+				return RedirectToAction("Index");
+			}
+
+			return View();
 		}
 	}
 }

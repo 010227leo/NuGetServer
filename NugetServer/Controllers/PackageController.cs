@@ -9,6 +9,7 @@ namespace NugetServer.Controllers
 
 	public class PackageController : Controller
 	{
+		[AdminAuth]
 		public ActionResult Index()
 		{
 			return View();
@@ -29,6 +30,7 @@ namespace NugetServer.Controllers
 			};
 		}
 
+		[AdminAuth]
 		public ActionResult Delete(string id)
 		{
 			if (string.IsNullOrWhiteSpace(id) || !id.Contains("/api/v2/package/"))
